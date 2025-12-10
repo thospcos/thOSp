@@ -12,7 +12,7 @@ document.getElementById("contactForm").addEventListener("submit", e => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       content:
-        "# New thOSp Form Submission\n" +
+        "# [ thOSp // MESSAGE RECEIVED ]\n" +
         `**Name:** ${name}\n` +
         `**Message:** ${message}`
     })
@@ -21,5 +21,5 @@ document.getElementById("contactForm").addEventListener("submit", e => {
     alert("Message sent, thank you for your cooperation!");
     e.target.reset();
   })
-  .catch(() => alert("Failed to send ❌"));
+  .catch(() => alert("Failed to send"));
 });
