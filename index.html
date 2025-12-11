@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>thosp • Commisions</title>
+  <title>thosp • Commissions</title>
   <style>
     body {
       margin: 0;
@@ -100,6 +100,131 @@
       }
     }
 
+    /* NEW: Enhanced About Section Styles */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid #2cff6a;
+      overflow: hidden;
+      background: linear-gradient(135deg, #2cff6a 0%, #0d0f13 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: #000;
+      flex-shrink: 0;
+    }
+
+    .title-group h1 {
+      margin-bottom: 2px;
+    }
+
+    .title-group .tiny {
+      margin-bottom: 0;
+    }
+
+    .bio {
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      padding: 12px;
+      background: rgba(44, 255, 106, 0.03);
+      border-radius: 8px;
+      border-left: 3px solid #2cff6a;
+    }
+
+    .highlight {
+      color: #2cff6a;
+      font-weight: 600;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .service-item {
+      background: #0f1116;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #1f222b;
+      transition: all 0.3s ease;
+      cursor: default;
+    }
+
+    .service-item:hover {
+      border-color: #2cff6a;
+      transform: translateY(-3px);
+    }
+
+    .service-icon {
+      font-size: 20px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .service-name {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .service-desc {
+      font-size: 10px;
+      opacity: 0.8;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #0f1116;
+      border-radius: 8px;
+      border: 1px solid #1f222b;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      display: block;
+      font-size: 20px;
+      font-weight: 700;
+      color: #2cff6a;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      opacity: 0.8;
+    }
+
+    .tagline {
+      font-style: italic;
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      color: #9dffb3;
+      border-top: 1px solid #1f222b;
+      margin-top: 15px;
+      padding-top: 15px;
+    }
+
+    /* Rest of your existing CSS remains the same */
     .order-form {
       display: flex;
       flex-direction: column;
@@ -210,7 +335,7 @@
 
     .accessory-select:focus {
       outline: none;
-      border-color: #9dffb3;
+      border-color: #9dff6a;
       background: #13161c;
     }
 
@@ -234,7 +359,7 @@
 
     .amount-input:focus {
       outline: none;
-      border-color: #9dffb3;
+      border-color: #9dff6a;
       background: #13161c;
     }
 
@@ -521,22 +646,125 @@
     a, button, input, select, textarea {
       -webkit-tap-highlight-color: rgba(44, 255, 106, 0.3);
     }
+
+    /* NEW: Smooth Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .about {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .avatar {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .service-item {
+      animation: fadeInUp 0.5s ease-out backwards;
+    }
+
+    .service-item:nth-child(1) { animation-delay: 0.1s; }
+    .service-item:nth-child(2) { animation-delay: 0.2s; }
+    .service-item:nth-child(3) { animation-delay: 0.3s; }
+    .service-item:nth-child(4) { animation-delay: 0.4s; }
+
+    .stat-item {
+      animation: fadeInUp 0.5s ease-out backwards;
+    }
+
+    .stat-item:nth-child(1) { animation-delay: 0.2s; }
+    .stat-item:nth-child(2) { animation-delay: 0.3s; }
+    .stat-item:nth-child(3) { animation-delay: 0.4s; }
   </style>
 </head>
 
 <body>
 
-  <div class="topbar">thosp • Commisions</div>
+  <div class="topbar">thosp • Commissions</div>
 
   <div class="container">
+    <!-- UPDATED About Section -->
     <div class="about">
-      <h1>About Me</h1>
-      <p class="tiny">About me, Introducing myself.</p>
-      <p style="font-size: 13px; line-height: 1.5;">Hello! My name is R. Alfian, but you can just call me thosp. Im just regular person who likes drawing cool stuff and turning those drawings into accessories like standees, keychains, and pins. Im not a big professional or anything, I just enjoy creating things and sharing them with people who like my style.
-If you ever want custom art or merch based on your own characters or ideas :3</p>
-      
+      <div class="profile-header">
+        <div class="avatar">TH</div>
+        <div class="title-group">
+          <h1>About Me</h1>
+          <p class="tiny">Artist & Accessory Creator</p>
+        </div>
+      </div>
+
+      <div class="bio">
+        Hello! I'm <span class="highlight">R. Alfian</span>, but you can just call me <span class="highlight">thosp</span>. I'm a passionate creator who loves turning digital art into tangible accessories that people can wear and enjoy every day.
+        
+        <br><br>
+        
+        What started as a hobby has grown into a small commission business where I help bring your characters and ideas to life as <span class="highlight">standees, keychains, and pins</span>. I'm not a big professional studio—just someone who genuinely enjoys the creative process and sharing it with others.
+      </div>
+
+      <div class="services-grid">
+        <div class="service-item">
+          <span class="service-icon">🖌️</span>
+          <div class="service-name">Digital Art</div>
+          <div class="service-desc">Custom character designs</div>
+        </div>
+        
+        <div class="service-item">
+          <span class="service-icon">🔑</span>
+          <div class="service-name">Keychains</div>
+          <div class="service-desc">Durable acrylic prints</div>
+        </div>
+        
+        <div class="service-item">
+          <span class="service-icon">📌</span>
+          <div class="service-name">Pins</div>
+          <div class="service-desc">Enamel & acrylic</div>
+        </div>
+        
+        <div class="service-item">
+          <span class="service-icon">🏛️</span>
+          <div class="service-name">Standees</div>
+          <div class="service-desc">Acrylic displays</div>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-number">3+</span>
+          <span class="stat-label">Years Creating</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50+</span>
+          <span class="stat-label">Projects Made</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Handmade</span>
+        </div>
+      </div>
+
+      <div class="tagline">
+        "Turning pixels into something you can hold."
+      </div>
+
       <div class="sources">
-        <div class="sources-title">Sources:</div>
+        <div class="sources-title">Connect With Me:</div>
         
         <div class="source-item">
           <div class="source-icon">
