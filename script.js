@@ -14,14 +14,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const addAccessoryBtn = document.getElementById("addAccessoryBtn");
   const totalPriceDisplay = document.getElementById("totalPrice");
   
+  // Initialize with one accessory item
+  let accessoryCount = 1;
+  
   // Function to create a new accessory item
   function createAccessoryItem() {
+    accessoryCount++;
     const itemDiv = document.createElement('div');
     itemDiv.className = 'accessory-item';
+    itemDiv.id = 'accessory-' + accessoryCount;
     
     const select = document.createElement('select');
     select.className = 'accessory-select';
     select.required = true;
+    select.name = 'accessory-type[]';
     
     const options = [
       {value: '', text: 'Select accessory type'},
@@ -44,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     amountInput.max = '10';
     amountInput.value = '1';
     amountInput.required = true;
+    amountInput.name = 'accessory-amount[]';
     
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
@@ -67,13 +74,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return itemDiv;
   }
   
-  // Function to update remove buttons state (disable if only one item)
+  // Function to update remove buttons state
   function updateRemoveButtons() {
     const items = accessoriesContainer.querySelectorAll('.accessory-item');
     const removeBtns = accessoriesContainer.querySelectorAll('.remove-btn');
     
-    if (items.length === 1) {
-      removeBtns[0].disabled = true;
+    if (items.length <= 1) {
+      removeBtns.forEach(btn => btn.disabled = true);
     } else {
       removeBtns.forEach(btn => btn.disabled = false);
     }
@@ -88,10 +95,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const select = item.querySelector('.accessory-select');
       const amountInput = item.querySelector('.amount-input');
       
-      if (select.value && amountInput.value) {
+      if (select && select.value && amountInput && amountInput.value) {
         const price = prices[select.value];
-        const amount = parseInt(amountInput.value) || 0;
-        total += price * amount;
+        if (price) {
+          const amount = parseInt(amountInput.value) || 0;
+          if (amount >= 1 && amount <= 10) {
+            total += price * amount;
+          }
+        }
       }
     });
     
@@ -108,6 +119,17 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Initialize remove buttons state
   updateRemoveButtons();
+  
+  // Add event listeners to initial accessory item
+  const initialSelect = accessoriesContainer.querySelector('.accessory-select');
+  const initialAmount = accessoriesContainer.querySelector('.amount-input');
+  
+  if (initialSelect) {
+    initialSelect.addEventListener('change', updateTotalPrice);
+  }
+  if (initialAmount) {
+    initialAmount.addEventListener('input', updateTotalPrice);
+  }
   
   // Initial price calculation
   updateTotalPrice();
@@ -126,20 +148,40 @@ document.addEventListener("DOMContentLoaded", () => {
     const items = accessoriesContainer.querySelectorAll('.accessory-item');
     
     let hasValidAccessories = false;
+    let isValid = true;
     
     items.forEach((item, index) => {
       const select = item.querySelector('.accessory-select');
       const amountInput = item.querySelector('.amount-input');
       
-      if (select.value && amountInput.value) {
-        hasValidAccessories = true;
-        accessoryItems.push({
-          type: select.value,
-          amount: parseInt(amountInput.value) || 0,
-          price: prices[select.value] * (parseInt(amountInput.value) || 0)
-        });
+      if (!select || !select.value) {
+        isValid = false;
+        alert(`Accessory #${index + 1}: Please select an accessory type.`);
+        return;
       }
+      
+      if (!amountInput || !amountInput.value) {
+        isValid = false;
+        alert(`Accessory #${index + 1}: Please enter an amount.`);
+        return;
+      }
+      
+      const amount = parseInt(amountInput.value);
+      if (amount < 1 || amount > 10) {
+        isValid = false;
+        alert(`Accessory #${index + 1}: Amount must be between 1 and 10.`);
+        return;
+      }
+      
+      hasValidAccessories = true;
+      accessoryItems.push({
+        type: select.value,
+        amount: amount,
+        price: prices[select.value] * amount
+      });
     });
+
+    if (!isValid) return;
 
     // Validation
     if (!name) {
@@ -157,14 +199,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     
-    // Check if any amount is invalid
-    for (const item of accessoryItems) {
-      if (item.amount < 1 || item.amount > 10) {
-        alert("Each accessory amount must be between 1 and 10.");
-        return;
-      }
-    }
-    
     if (message.length < 10) {
       alert("Message must be at least 10 characters.");
       return;
@@ -175,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Build accessory list for Discord
     const accessoryList = accessoryItems.map(item => 
-      `${item.type} × ${item.amount} = ${item.price.toLocaleString('id-ID')} IDR`
+      `${item.type} × ${item.amount} = Rp ${item.price.toLocaleString('id-ID')}`
     ).join('\n');
 
     // Show loading state
@@ -192,11 +226,11 @@ document.addEventListener("DOMContentLoaded", () => {
           title: "New Order Received",
           color: 0x2cff6a,
           fields: [
-            { name: "Name", value: name },
-            { name: "Email", value: email },
-            { name: "Accessories", value: accessoryList },
-            { name: "Total Price", value: `${totalPrice.toLocaleString('id-ID')} IDR` },
-            { name: "Message", value: message.length > 1000 ? message.substring(0, 1000) + "..." : message }
+            { name: "Name", value: name || "Not provided" },
+            { name: "Email", value: email || "Not provided" },
+            { name: "Accessories", value: accessoryList || "No accessories selected" },
+            { name: "Total Price", value: `Rp ${totalPrice.toLocaleString('id-ID')}` },
+            { name: "Message", value: message.length > 1000 ? message.substring(0, 1000) + "..." : message || "No message" }
           ],
           timestamp: new Date().toISOString(),
           footer: { 
@@ -216,13 +250,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (res.ok) {
         alert("Order sent successfully! I'll contact you via email soon.");
+        
+        // Reset form
         form.reset();
         
         // Reset accessories to one item
-        accessoriesContainer.innerHTML = '';
-        const initialItem = createAccessoryItem();
-        accessoriesContainer.appendChild(initialItem);
+        accessoriesContainer.innerHTML = `
+          <div class="accessory-item">
+            <select class="accessory-select" required>
+              <option value="">Select accessory type</option>
+              <option value="Keychain">Keychain (13.000 IDR)</option>
+              <option value="Pin">Pin (13.000 IDR)</option>
+              <option value="Acrylic Standee">Acrylic Standee (21.000 IDR)</option>
+            </select>
+            <input class="amount-input" type="number" min="1" max="10" value="1" required>
+            <button type="button" class="remove-btn" disabled>Remove</button>
+          </div>
+        `;
+        
+        // Reset accessory count
+        accessoryCount = 1;
+        
+        // Re-initialize event listeners
         updateRemoveButtons();
+        
+        // Re-add event listeners to new initial item
+        const newInitialSelect = accessoriesContainer.querySelector('.accessory-select');
+        const newInitialAmount = accessoriesContainer.querySelector('.amount-input');
+        
+        if (newInitialSelect) {
+          newInitialSelect.addEventListener('change', updateTotalPrice);
+        }
+        if (newInitialAmount) {
+          newInitialAmount.addEventListener('input', updateTotalPrice);
+        }
+        
+        // Reset total price
         updateTotalPrice();
       } else {
         throw new Error(`HTTP error! status: ${res.status}`);
@@ -236,11 +299,4 @@ document.addEventListener("DOMContentLoaded", () => {
       submitBtn.disabled = false;
     }
   });
-
-  // Add event listeners to initial accessory item
-  const initialSelect = accessoriesContainer.querySelector('.accessory-select');
-  const initialAmount = accessoriesContainer.querySelector('.amount-input');
-  
-  initialSelect.addEventListener('change', updateTotalPrice);
-  initialAmount.addEventListener('input', updateTotalPrice);
 });
