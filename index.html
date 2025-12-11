@@ -133,6 +133,63 @@
       border-color: #9dffb3;
     }
 
+    /* New styles for accessory items */
+    .accessory-item {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      align-items: center;
+    }
+
+    .accessory-select {
+      flex: 2;
+    }
+
+    .amount-input {
+      flex: 1;
+      min-width: 80px;
+    }
+
+    .remove-btn {
+      padding: 8px 12px;
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .remove-btn:hover {
+      background: #ff6b6b;
+    }
+
+    .add-btn {
+      padding: 10px 15px;
+      background: #1f222b;
+      color: #2cff6a;
+      border: 1px solid #2cff6a;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .add-btn:hover {
+      background: #2cff6a;
+      color: #000;
+    }
+
+    .total-price {
+      margin-top: 20px;
+      padding: 15px;
+      background: #0f1116;
+      border-radius: 10px;
+      border: 1px solid #1f222b;
+      font-weight: 600;
+      color: #2cff6a;
+    }
+
   </style>
 </head>
 
@@ -159,16 +216,26 @@
         <label>Email</label>
         <input id="email" type="email" placeholder="your@email.com" required>
 
-        <label>Accessory Type</label>
-        <select id="type" required>
-          <option value="">Select an option</option>
-          <option value="Keychain">Keychain (Gantungan Kunci)</option>
-          <option value="Pin">Pin (Pin Peniti)</option>
-          <option value="Acrylic Standee">Acrylic Standee (Pajangan Berdiri Akrilik)</option>
-        </select>
+        <label>Accessories</label>
+        <div id="accessoriesContainer">
+          <!-- Accessory items will be added here dynamically -->
+          <div class="accessory-item">
+            <select class="accessory-select" required>
+              <option value="">Select accessory type</option>
+              <option value="Keychain">Keychain (13.000 IDR)</option>
+              <option value="Pin">Pin (13.000 IDR)</option>
+              <option value="Acrylic Standee">Acrylic Standee (21.000 IDR)</option>
+            </select>
+            <input class="amount-input" type="number" min="1" max="10" value="1" required>
+            <button type="button" class="remove-btn" disabled>Remove</button>
+          </div>
+        </div>
 
-        <label>Amount (1–10)</label>
-        <input id="amount" type="number" min="1" max="10" value="1" required>
+        <button type="button" class="add-btn" id="addAccessoryBtn">Add +</button>
+
+        <div class="total-price">
+          Total Price: <span id="totalPrice">0</span> IDR
+        </div>
 
         <label>Message</label>
         <textarea id="message" placeholder="Describe what you want..." rows="6" required></textarea>
