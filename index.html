@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Website</title>
+  <title>thosp • Commisions</title>
   <style>
     body {
       margin: 0;
@@ -164,6 +164,74 @@
     <p class="tiny">My works blah blah blah</p>
     <p>Show your works here...</p>
   </div>
+
+  <script>
+    const form = document.querySelector('.order-form');
+    const accessorySelect = form.querySelector('select');
+    const amountInput = document.createElement('input');
+    const priceInput = document.createElement('input');
+
+    amountInput.type = 'number';
+    amountInput.min = 1;
+    amountInput.max = 10;
+    amountInput.placeholder = 'Amount of pieces (1-10)';
+    amountInput.required = true;
+
+    priceInput.type = 'text';
+    priceInput.placeholder = 'Final Price';
+    priceInput.readOnly = true;
+
+    form.insertBefore(amountInput, form.querySelector('label[for="Message"]'));
+    form.insertBefore(priceInput, form.querySelector('label[for="Message"]'));
+
+    const prices = {
+      'Keychain (Gantungan Kunci)': 13000,
+      'Pin (Pin Peniti)': 13000,
+      'Acrylic Standee (Pajangan Berdiri Akrilik)': 21000
+    };
+
+    accessorySelect.addEventListener('change', updatePrice);
+    amountInput.addEventListener('input', updatePrice);
+
+    function updatePrice() {
+      const type = accessorySelect.value;
+      const amt = parseInt(amountInput.value) || 0;
+      const base = prices[type] || 0;
+      priceInput.value = base && amt ? `${base * amt} IDR` : '';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = form.querySelector('input[type="text"]').value;
+      const email = form.querySelector('input[type="email"]').value;
+      const msg = form.querySelector('textarea').value;
+      const type = accessorySelect.value;
+      const amount = amountInput.value;
+      const finalPrice = priceInput.value;
+
+      if (msg.length < 10) {
+        alert('Message must be at least 10 characters.');
+        return;
+      }
+
+      const webhookURL = "PUT YOUR WEBHOOK HERE";
+
+      const payload = {
+        content: `**New Order Received**\nName: ${name}\nEmail: ${email}\nAccessory: ${type}\nAmount: ${amount}\nFinal Price: ${finalPrice}\nMessage: ${msg}`
+      };
+
+      await fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      alert('Order submitted successfully!');
+      form.reset();
+      priceInput.value = '';
+    });
+  </script>
 
 </body>
 </html>
