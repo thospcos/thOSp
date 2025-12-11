@@ -224,11 +224,11 @@
       font-size: 16px;
     }
 
-    /* NOTE styles */
+    /* NOTE styles - Updated for more spacing */
     .note-container {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 50px; /* Increased gap */
       margin-bottom: 8px;
     }
 
@@ -240,6 +240,8 @@
       border: 1px solid rgba(44, 255, 106, 0.3);
       font-size: 14px;
       font-weight: 600;
+      margin-left: auto; /* This pushes it to the right */
+      white-space: nowrap; /* Prevents text wrapping */
     }
   </style>
 </head>
@@ -258,7 +260,7 @@
     <div class="order">
       <div class="note-container">
         <h1>Order</h1>
-        <span class="note">NOTE: Fill all the fields carefully.</span>
+        <span class="note">NOTE: Fill all fields carefully</span>
       </div>
       <p class="tiny">Order here, fill out the form.</p>
 
