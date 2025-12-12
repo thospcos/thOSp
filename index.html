@@ -255,6 +255,18 @@
       background: #13161c;
     }
 
+    /* FIX: Make message box taller */
+    .order-form textarea {
+      min-height: 120px; /* Increased from default */
+      resize: vertical; /* Allows user to resize if needed */
+    }
+
+    @media (min-width: 768px) {
+      .order-form textarea {
+        min-height: 150px; /* Even taller on desktop */
+      }
+    }
+
     .order-form button {
       margin-top: 14px;
       padding: 10px 14px;
@@ -279,7 +291,7 @@
       background: #a6ffcb;
     }
 
-    /* NEW: Digital Art Type Selection */
+    /* Digital Art Type Selection */
     .digital-art-type-container {
       display: none;
       margin-top: 8px;
@@ -351,7 +363,7 @@
       display: inline;
     }
 
-    /* NEW: Order Code Display */
+    /* Order Code Display */
     .order-code-display {
       display: none;
       margin-top: 15px;
@@ -955,8 +967,9 @@
           Total Price: <span id="totalPrice">0</span> IDR
         </div>
 
+        <!-- FIX: Taller message box -->
         <label>Message</label>
-        <textarea id="message" placeholder="Describe your wants.." rows="5" required></textarea>
+        <textarea id="message" placeholder="Describe your wants.." rows="6" required></textarea>
 
         <button type="submit">Submit Order</button>
       </form>
@@ -1037,22 +1050,29 @@
       return result;
     }
 
+    // Function to show/hide digital art type selection
     function toggleDigitalArtType(selectElement, accessoryItem) {
       const digitalArtContainer = accessoryItem.querySelector('.digital-art-type-container');
-      const typeContainer = digitalArtContainer || createDigitalArtTypeContainer(accessoryItem);
       
       if (selectElement.value === 'Digital Art Commission') {
-        typeContainer.classList.add('visible');
-        // Hide amount input for digital art
+        if (!digitalArtContainer) {
+          createDigitalArtTypeContainer(accessoryItem);
+        } else {
+          digitalArtContainer.classList.add('visible');
+        }
+        // Hide amount input for digital art (can only choose one)
         accessoryItem.querySelector('.amount-input').style.display = 'none';
         accessoryItem.querySelector('.amount-input').value = '1';
       } else {
-        typeContainer.classList.remove('visible');
+        if (digitalArtContainer) {
+          digitalArtContainer.classList.remove('visible');
+        }
         // Show amount input for other items
         accessoryItem.querySelector('.amount-input').style.display = 'block';
       }
     }
 
+    // Function to create digital art type container
     function createDigitalArtTypeContainer(accessoryItem) {
       const container = document.createElement('div');
       container.className = 'digital-art-type-container';
@@ -1083,28 +1103,36 @@
         </div>
       `;
       
+      // Insert after the select element
       const select = accessoryItem.querySelector('.accessory-select');
       accessoryItem.insertBefore(container, select.nextSibling);
       
+      // Add click handlers for digital art options
       container.querySelectorAll('.digital-art-option').forEach(option => {
         option.addEventListener('click', function() {
+          // Remove selection from all options
           container.querySelectorAll('.digital-art-option').forEach(opt => {
             opt.classList.remove('selected');
           });
           
+          // Add selection to clicked option
           this.classList.add('selected');
           
+          // Update the select value to the chosen type
           const type = this.getAttribute('data-type');
           const select = accessoryItem.querySelector('.accessory-select');
           select.value = type;
           
+          // Trigger price update
           updateTotalPrice();
         });
       });
       
+      container.classList.add('visible');
       return container;
     }
 
+    // Function to create a new accessory item
     function createAccessoryItem() {
       const accessoryItem = document.createElement('div');
       accessoryItem.className = 'accessory-item';
@@ -1141,17 +1169,13 @@
       removeBtn.className = 'remove-btn';
       removeBtn.textContent = 'Remove';
       
+      // Add event listeners
       select.addEventListener('change', function() {
         toggleDigitalArtType(this, accessoryItem);
         updateTotalPrice();
       });
       
       amountInput.addEventListener('input', updateTotalPrice);
-      
-      // Mobile: prevent zoom on input focus
-      amountInput.addEventListener('focus', function() {
-        this.style.fontSize = '16px';
-      });
       
       removeBtn.addEventListener('click', function() {
         accessoryItem.remove();
@@ -1166,11 +1190,46 @@
       return accessoryItem;
     }
 
+    // Function to update remove buttons state
+    function updateRemoveButtons() {
+      const items = document.querySelectorAll('.accessory-item');
+      const removeBtns = document.querySelectorAll('.remove-btn');
+      
+      if (items.length <= 1) {
+        removeBtns.forEach(btn => btn.disabled = true);
+      } else {
+        removeBtns.forEach(btn => btn.disabled = false);
+      }
+    }
+
+    // Function to calculate and update total price
+    function updateTotalPrice() {
+      let total = 0;
+      const items = document.querySelectorAll('.accessory-item');
+      
+      items.forEach(item => {
+        const select = item.querySelector('.accessory-select');
+        const amountInput = item.querySelector('.amount-input');
+        
+        if (select && select.value && amountInput && amountInput.value) {
+          const price = prices[select.value];
+          if (price) {
+            const amount = parseInt(amountInput.value) || 0;
+            if (amount >= 1 && amount <= 10) {
+              total += price * amount;
+            }
+          }
+        }
+      });
+      
+      document.getElementById('totalPrice').textContent = total.toLocaleString('id-ID');
+    }
+
+    // FIX: Add event listeners properly
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById("orderForm");
       const accessoriesContainer = document.getElementById("accessoriesContainer");
       const addAccessoryBtn = document.getElementById("addAccessoryBtn");
-      const totalPriceDisplay = document.getElementById("totalPrice");
       const orderCodeDisplay = document.getElementById("orderCodeDisplay");
       const orderCodeValue = document.getElementById("orderCodeValue");
       
@@ -1181,71 +1240,43 @@
       const initialItem = createAccessoryItem();
       accessoriesContainer.appendChild(initialItem);
       
-      function updateRemoveButtons() {
-        const items = accessoriesContainer.querySelectorAll('.accessory-item');
-        const removeBtns = accessoriesContainer.querySelectorAll('.remove-btn');
-        
-        if (items.length <= 1) {
-          removeBtns.forEach(btn => btn.disabled = true);
-        } else {
-          removeBtns.forEach(btn => btn.disabled = false);
-        }
-      }
+      // Update remove buttons state
+      updateRemoveButtons();
       
-      function updateTotalPrice() {
-        let total = 0;
-        const items = accessoriesContainer.querySelectorAll('.accessory-item');
-        
-        items.forEach(item => {
-          const select = item.querySelector('.accessory-select');
-          const amountInput = item.querySelector('.amount-input');
-          
-          if (select && select.value && amountInput && amountInput.value) {
-            const price = prices[select.value];
-            if (price) {
-              const amount = parseInt(amountInput.value) || 0;
-              if (amount >= 1 && amount <= 10) {
-                total += price * amount;
-              }
-            }
-          }
-        });
-        
-        totalPriceDisplay.textContent = total.toLocaleString('id-ID');
-      }
+      // Calculate initial total price
+      updateTotalPrice();
       
+      // Add accessory button click handler - FIXED
       addAccessoryBtn.addEventListener('click', function() {
         const newItem = createAccessoryItem();
         accessoriesContainer.appendChild(newItem);
         updateRemoveButtons();
         updateTotalPrice();
-        
-        if (window.innerWidth < 768) {
-          newItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
       });
       
-      updateRemoveButtons();
-      updateTotalPrice();
-      
+      // Form submission
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
+        // Generate new order code for this submission
         const orderCode = generateOrderCode();
         orderCodeValue.textContent = orderCode;
         orderCodeDisplay.classList.add('visible');
         
+        // Get basic fields
         const name = document.getElementById("name").value.trim();
         const email = document.getElementById("email").value.trim();
         const message = document.getElementById("message").value.trim();
 
+        // Get all accessory items
         const accessoryItems = [];
-        const items = accessoriesContainer.querySelectorAll('.accessory-item');
+        const items = document.querySelectorAll('.accessory-item');
         
         let hasValidAccessories = false;
         let isValid = true;
         let errorMessage = "";
         
+        // Validate each accessory item
         items.forEach((item, index) => {
           const select = item.querySelector('.accessory-select');
           const amountInput = item.querySelector('.amount-input');
@@ -1256,7 +1287,9 @@
             return;
           }
           
+          // Special validation for Digital Art Commission
           if (select.value === 'Digital Art Commission') {
+            // Check if a digital art type is selected
             const digitalArtOption = item.querySelector('.digital-art-option.selected');
             if (!digitalArtOption) {
               isValid = false;
@@ -1264,8 +1297,9 @@
               return;
             }
             
+            // Get the actual type from the selected option
             const actualType = digitalArtOption.getAttribute('data-type');
-            const amount = 1;
+            const amount = 1; // Digital art is always 1
             
             hasValidAccessories = true;
             accessoryItems.push({
@@ -1323,17 +1357,21 @@
           return;
         }
 
+        // Calculate total price
         const totalPrice = accessoryItems.reduce((sum, item) => sum + item.price, 0);
 
+        // Build accessory list for Discord
         const accessoryList = accessoryItems.map(item => 
           `${item.type} × ${item.amount} = Rp ${item.price.toLocaleString('id-ID')}`
         ).join('\n');
 
+        // Show loading state
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = "Sending...";
         submitBtn.disabled = true;
 
+        // Build Discord embed
         const payload = {
           username: "Order Notifier",
           embeds: [
@@ -1356,6 +1394,7 @@
           ]
         };
 
+        // Send to Discord
         try {
           const res = await fetch(WEBHOOK_URL, {
             method: "POST",
@@ -1366,19 +1405,23 @@
           if (res.ok) {
             alert(`Order sent successfully!\n\nOrder Code: ${orderCode}\n\nI'll contact you at ${email} soon.`);
             
+            // Reset form
             form.reset();
             
+            // Reset accessories to one item
             accessoriesContainer.innerHTML = '';
             const newInitialItem = createAccessoryItem();
             accessoriesContainer.appendChild(newInitialItem);
             
+            // Reset remove buttons
             updateRemoveButtons();
             
+            // Reset total price
             updateTotalPrice();
             
-            if (window.innerWidth < 768) {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+            // Hide order code display
+            orderCodeDisplay.classList.remove('visible');
+            
           } else {
             throw new Error(`HTTP error! status: ${res.status}`);
           }
@@ -1392,16 +1435,6 @@
         }
       });
       
-      const inputs = form.querySelectorAll('input, textarea, select');
-      inputs.forEach(input => {
-        input.addEventListener('blur', function() {
-          if (window.innerWidth < 768) {
-            setTimeout(() => {
-              window.scrollTo(0, 0);
-            }, 100);
-          }
-        });
-      });
     });
   </script>
 </body>
