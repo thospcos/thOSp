@@ -100,7 +100,7 @@
       }
     }
 
-    /* NEW: Enhanced About Section Styles */
+    /* Enhanced About Section */
     .profile-header {
       display: flex;
       align-items: center;
@@ -224,7 +224,7 @@
       padding-top: 15px;
     }
 
-    /* Rest of your existing CSS remains the same */
+    /* Order Form Styles */
     .order-form {
       display: flex;
       flex-direction: column;
@@ -279,6 +279,113 @@
       background: #a6ffcb;
     }
 
+    /* NEW: Digital Art Type Selection */
+    .digital-art-type-container {
+      display: none;
+      margin-top: 8px;
+      padding: 10px;
+      background: rgba(44, 255, 106, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(44, 255, 106, 0.2);
+    }
+
+    .digital-art-type-container.visible {
+      display: block;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    .digital-art-options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    @media (min-width: 768px) {
+      .digital-art-options {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .digital-art-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: #0f1116;
+      border: 1px solid #1f222b;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .digital-art-option:hover {
+      border-color: #9dffb3;
+      background: #13161c;
+    }
+
+    .digital-art-option.selected {
+      border-color: #2cff6a;
+      background: rgba(44, 255, 106, 0.1);
+    }
+
+    .digital-art-name {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .digital-art-price {
+      font-size: 11px;
+      color: #2cff6a;
+      font-weight: 600;
+    }
+
+    .digital-art-checkmark {
+      color: #2cff6a;
+      font-size: 12px;
+      margin-left: 5px;
+      display: none;
+    }
+
+    .digital-art-option.selected .digital-art-checkmark {
+      display: inline;
+    }
+
+    /* NEW: Order Code Display */
+    .order-code-display {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      background: #0f1116;
+      border-radius: 8px;
+      border: 1px solid #1f222b;
+      text-align: center;
+    }
+
+    .order-code-display.visible {
+      display: block;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .order-code-label {
+      font-size: 11px;
+      opacity: 0.8;
+      margin-bottom: 5px;
+    }
+
+    .order-code-value {
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: #2cff6a;
+      letter-spacing: 1px;
+      background: rgba(44, 255, 106, 0.1);
+      padding: 6px 10px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    /* Works Section */
     .works-section {
       margin: 20px auto;
       padding: 25px;
@@ -301,11 +408,13 @@
       border-color: #9dffb3;
     }
 
+    /* Accessory Items */
     .accessory-item {
       display: flex;
       flex-direction: column;
       gap: 8px;
       margin-bottom: 10px;
+      position: relative;
     }
 
     @media (min-width: 768px) {
@@ -475,6 +584,7 @@
       }
     }
 
+    /* Works Grid */
     .works-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -511,6 +621,7 @@
       text-align: center;
     }
 
+    /* Sources */
     .sources {
       margin-top: 18px;
       padding-top: 15px;
@@ -558,7 +669,7 @@
       color: #9dffb3;
     }
 
-    /* Footer Styles */
+    /* Footer */
     .site-footer {
       margin: 20px auto;
       padding: 20px;
@@ -613,15 +724,7 @@
       font-size: 14px;
     }
 
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      color: #2cff6a;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
+    /* Mobile */
     @media (max-width: 767px) {
       input, select, textarea, button {
         min-height: 40px;
@@ -647,7 +750,7 @@
       -webkit-tap-highlight-color: rgba(44, 255, 106, 0.3);
     }
 
-    /* NEW: Smooth Animations */
+    /* Animations */
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -665,6 +768,28 @@
       }
       50% {
         transform: translateY(-5px);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+        max-height: 0;
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 200px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
       }
     }
 
@@ -692,6 +817,10 @@
     .stat-item:nth-child(1) { animation-delay: 0.2s; }
     .stat-item:nth-child(2) { animation-delay: 0.3s; }
     .stat-item:nth-child(3) { animation-delay: 0.4s; }
+
+    .accessory-item {
+      animation: fadeInUp 0.3s ease-out;
+    }
   </style>
 </head>
 
@@ -700,7 +829,7 @@
   <div class="topbar">thosp • Commissions</div>
 
   <div class="container">
-    <!-- UPDATED About Section -->
+    <!-- Updated About Section -->
     <div class="about">
       <div class="profile-header">
         <div class="avatar">TH</div>
@@ -722,7 +851,7 @@
         <div class="service-item">
           <span class="service-icon">🖌️</span>
           <div class="service-name">Digital Art</div>
-          <div class="service-desc">Custom character designs</div>
+          <div class="service-desc">Custom character art</div>
         </div>
         
         <div class="service-item">
@@ -811,19 +940,16 @@
 
         <label>Accessories</label>
         <div id="accessoriesContainer">
-          <div class="accessory-item">
-            <select class="accessory-select" required>
-              <option value="">Select accessory type</option>
-              <option value="Keychain">Keychain (13.000 IDR)</option>
-              <option value="Pin">Pin (13.000 IDR)</option>
-              <option value="Acrylic Standee">Acrylic Standee (21.000 IDR)</option>
-            </select>
-            <input class="amount-input" type="number" min="1" max="10" value="1" required>
-            <button type="button" class="remove-btn" disabled>Remove</button>
-          </div>
+          <!-- Accessory items will be added here by JavaScript -->
         </div>
 
         <button type="button" class="add-btn" id="addAccessoryBtn">Add +</button>
+
+        <!-- Order Code Display -->
+        <div class="order-code-display" id="orderCodeDisplay">
+          <div class="order-code-label">Your Order Code:</div>
+          <div class="order-code-value" id="orderCodeValue">02OVI12U8A2112</div>
+        </div>
 
         <div class="total-price">
           Total Price: <span id="totalPrice">0</span> IDR
@@ -886,6 +1012,397 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    // === CONFIG ===
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1448550152158838936/avMJGylaWKWS2YuHmTp2gfLFUerf-9P_pAb6qSo78wb8LA9eHFLB5U6YqaRGNOh6TqxV";
+
+    // === PRICE LIST ===
+    const prices = {
+      "Keychain": 13000,
+      "Pin": 13000,
+      "Acrylic Standee": 21000,
+      "Bust-Up": 10000,
+      "Half-Body": 15000,
+      "Head to Knee": 18000,
+      "Full-Body": 20000
+    };
+
+    // Function to generate random order code
+    function generateOrderCode() {
+      const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let result = '';
+      for (let i = 0; i < 14; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    function toggleDigitalArtType(selectElement, accessoryItem) {
+      const digitalArtContainer = accessoryItem.querySelector('.digital-art-type-container');
+      const typeContainer = digitalArtContainer || createDigitalArtTypeContainer(accessoryItem);
+      
+      if (selectElement.value === 'Digital Art Commission') {
+        typeContainer.classList.add('visible');
+        // Hide amount input for digital art
+        accessoryItem.querySelector('.amount-input').style.display = 'none';
+        accessoryItem.querySelector('.amount-input').value = '1';
+      } else {
+        typeContainer.classList.remove('visible');
+        // Show amount input for other items
+        accessoryItem.querySelector('.amount-input').style.display = 'block';
+      }
+    }
+
+    function createDigitalArtTypeContainer(accessoryItem) {
+      const container = document.createElement('div');
+      container.className = 'digital-art-type-container';
+      
+      container.innerHTML = `
+        <div style="font-size: 11px; margin-bottom: 5px; color: #9dffb3;">Select Digital Art Type:</div>
+        <div class="digital-art-options">
+          <div class="digital-art-option" data-type="Bust-Up">
+            <span class="digital-art-name">Bust-Up</span>
+            <span class="digital-art-price">10.000 IDR</span>
+            <span class="digital-art-checkmark">✓</span>
+          </div>
+          <div class="digital-art-option" data-type="Half-Body">
+            <span class="digital-art-name">Half-Body</span>
+            <span class="digital-art-price">15.000 IDR</span>
+            <span class="digital-art-checkmark">✓</span>
+          </div>
+          <div class="digital-art-option" data-type="Head to Knee">
+            <span class="digital-art-name">Head to Knee</span>
+            <span class="digital-art-price">18.000 IDR</span>
+            <span class="digital-art-checkmark">✓</span>
+          </div>
+          <div class="digital-art-option" data-type="Full-Body">
+            <span class="digital-art-name">Full-Body</span>
+            <span class="digital-art-price">20.000 IDR</span>
+            <span class="digital-art-checkmark">✓</span>
+          </div>
+        </div>
+      `;
+      
+      const select = accessoryItem.querySelector('.accessory-select');
+      accessoryItem.insertBefore(container, select.nextSibling);
+      
+      container.querySelectorAll('.digital-art-option').forEach(option => {
+        option.addEventListener('click', function() {
+          container.querySelectorAll('.digital-art-option').forEach(opt => {
+            opt.classList.remove('selected');
+          });
+          
+          this.classList.add('selected');
+          
+          const type = this.getAttribute('data-type');
+          const select = accessoryItem.querySelector('.accessory-select');
+          select.value = type;
+          
+          updateTotalPrice();
+        });
+      });
+      
+      return container;
+    }
+
+    function createAccessoryItem() {
+      const accessoryItem = document.createElement('div');
+      accessoryItem.className = 'accessory-item';
+      
+      const select = document.createElement('select');
+      select.className = 'accessory-select';
+      select.required = true;
+      
+      const options = [
+        {value: '', text: 'Select accessory type'},
+        {value: 'Keychain', text: 'Keychain (13.000 IDR)'},
+        {value: 'Pin', text: 'Pin (13.000 IDR)'},
+        {value: 'Acrylic Standee', text: 'Acrylic Standee (21.000 IDR)'},
+        {value: 'Digital Art Commission', text: 'Digital Art Commission (+)'}
+      ];
+      
+      options.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt.value;
+        option.textContent = opt.text;
+        select.appendChild(option);
+      });
+      
+      const amountInput = document.createElement('input');
+      amountInput.className = 'amount-input';
+      amountInput.type = 'number';
+      amountInput.min = '1';
+      amountInput.max = '10';
+      amountInput.value = '1';
+      amountInput.required = true;
+      
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'remove-btn';
+      removeBtn.textContent = 'Remove';
+      
+      select.addEventListener('change', function() {
+        toggleDigitalArtType(this, accessoryItem);
+        updateTotalPrice();
+      });
+      
+      amountInput.addEventListener('input', updateTotalPrice);
+      
+      // Mobile: prevent zoom on input focus
+      amountInput.addEventListener('focus', function() {
+        this.style.fontSize = '16px';
+      });
+      
+      removeBtn.addEventListener('click', function() {
+        accessoryItem.remove();
+        updateRemoveButtons();
+        updateTotalPrice();
+      });
+      
+      accessoryItem.appendChild(select);
+      accessoryItem.appendChild(amountInput);
+      accessoryItem.appendChild(removeBtn);
+      
+      return accessoryItem;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("orderForm");
+      const accessoriesContainer = document.getElementById("accessoriesContainer");
+      const addAccessoryBtn = document.getElementById("addAccessoryBtn");
+      const totalPriceDisplay = document.getElementById("totalPrice");
+      const orderCodeDisplay = document.getElementById("orderCodeDisplay");
+      const orderCodeValue = document.getElementById("orderCodeValue");
+      
+      // Generate initial order code
+      orderCodeValue.textContent = generateOrderCode();
+      
+      // Initialize with one accessory item
+      const initialItem = createAccessoryItem();
+      accessoriesContainer.appendChild(initialItem);
+      
+      function updateRemoveButtons() {
+        const items = accessoriesContainer.querySelectorAll('.accessory-item');
+        const removeBtns = accessoriesContainer.querySelectorAll('.remove-btn');
+        
+        if (items.length <= 1) {
+          removeBtns.forEach(btn => btn.disabled = true);
+        } else {
+          removeBtns.forEach(btn => btn.disabled = false);
+        }
+      }
+      
+      function updateTotalPrice() {
+        let total = 0;
+        const items = accessoriesContainer.querySelectorAll('.accessory-item');
+        
+        items.forEach(item => {
+          const select = item.querySelector('.accessory-select');
+          const amountInput = item.querySelector('.amount-input');
+          
+          if (select && select.value && amountInput && amountInput.value) {
+            const price = prices[select.value];
+            if (price) {
+              const amount = parseInt(amountInput.value) || 0;
+              if (amount >= 1 && amount <= 10) {
+                total += price * amount;
+              }
+            }
+          }
+        });
+        
+        totalPriceDisplay.textContent = total.toLocaleString('id-ID');
+      }
+      
+      addAccessoryBtn.addEventListener('click', function() {
+        const newItem = createAccessoryItem();
+        accessoriesContainer.appendChild(newItem);
+        updateRemoveButtons();
+        updateTotalPrice();
+        
+        if (window.innerWidth < 768) {
+          newItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+      
+      updateRemoveButtons();
+      updateTotalPrice();
+      
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const orderCode = generateOrderCode();
+        orderCodeValue.textContent = orderCode;
+        orderCodeDisplay.classList.add('visible');
+        
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const message = document.getElementById("message").value.trim();
+
+        const accessoryItems = [];
+        const items = accessoriesContainer.querySelectorAll('.accessory-item');
+        
+        let hasValidAccessories = false;
+        let isValid = true;
+        let errorMessage = "";
+        
+        items.forEach((item, index) => {
+          const select = item.querySelector('.accessory-select');
+          const amountInput = item.querySelector('.amount-input');
+          
+          if (!select || !select.value) {
+            isValid = false;
+            errorMessage = `Accessory #${index + 1}: Please select an accessory type.`;
+            return;
+          }
+          
+          if (select.value === 'Digital Art Commission') {
+            const digitalArtOption = item.querySelector('.digital-art-option.selected');
+            if (!digitalArtOption) {
+              isValid = false;
+              errorMessage = `Digital Art #${index + 1}: Please select a digital art type.`;
+              return;
+            }
+            
+            const actualType = digitalArtOption.getAttribute('data-type');
+            const amount = 1;
+            
+            hasValidAccessories = true;
+            accessoryItems.push({
+              type: actualType,
+              amount: amount,
+              price: prices[actualType] * amount
+            });
+          } else {
+            // Regular validation for other items
+            if (!amountInput || !amountInput.value) {
+              isValid = false;
+              errorMessage = `Accessory #${index + 1}: Please enter an amount.`;
+              return;
+            }
+            
+            const amount = parseInt(amountInput.value);
+            if (isNaN(amount) || amount < 1 || amount > 10) {
+              isValid = false;
+              errorMessage = `Accessory #${index + 1}: Amount must be between 1 and 10.`;
+              return;
+            }
+            
+            hasValidAccessories = true;
+            accessoryItems.push({
+              type: select.value,
+              amount: amount,
+              price: prices[select.value] * amount
+            });
+          }
+        });
+
+        if (!isValid) {
+          alert(errorMessage);
+          return;
+        }
+
+        // Validation
+        if (!name) {
+          alert("Please enter your name.");
+          return;
+        }
+        
+        if (!email.includes("@") || !email.includes(".")) {
+          alert("Please enter a valid email address.");
+          return;
+        }
+        
+        if (!hasValidAccessories || accessoryItems.length === 0) {
+          alert("Please add at least one accessory item.");
+          return;
+        }
+        
+        if (message.length < 10) {
+          alert("Message must be at least 10 characters.");
+          return;
+        }
+
+        const totalPrice = accessoryItems.reduce((sum, item) => sum + item.price, 0);
+
+        const accessoryList = accessoryItems.map(item => 
+          `${item.type} × ${item.amount} = Rp ${item.price.toLocaleString('id-ID')}`
+        ).join('\n');
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = "Sending...";
+        submitBtn.disabled = true;
+
+        const payload = {
+          username: "Order Notifier",
+          embeds: [
+            {
+              title: "New Order Received",
+              color: 0x2cff6a,
+              fields: [
+                { name: "Order Code", value: orderCode },
+                { name: "Name", value: name || "Not provided" },
+                { name: "Email", value: email || "Not provided" },
+                { name: "Accessories", value: accessoryList || "No accessories selected" },
+                { name: "Total Price", value: `Rp ${totalPrice.toLocaleString('id-ID')}` },
+                { name: "Message", value: message.length > 1000 ? message.substring(0, 1000) + "..." : message || "No message" }
+              ],
+              timestamp: new Date().toISOString(),
+              footer: { 
+                text: "thosp • Commissions • " + new Date().toLocaleDateString('id-ID') 
+              }
+            }
+          ]
+        };
+
+        try {
+          const res = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (res.ok) {
+            alert(`Order sent successfully!\n\nOrder Code: ${orderCode}\n\nI'll contact you at ${email} soon.`);
+            
+            form.reset();
+            
+            accessoriesContainer.innerHTML = '';
+            const newInitialItem = createAccessoryItem();
+            accessoriesContainer.appendChild(newInitialItem);
+            
+            updateRemoveButtons();
+            
+            updateTotalPrice();
+            
+            if (window.innerWidth < 768) {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          } else {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+        } catch (err) {
+          console.error("Error:", err);
+          alert("Failed to send order. Please try again or contact me directly.");
+        } finally {
+          // Restore button
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        }
+      });
+      
+      const inputs = form.querySelectorAll('input, textarea, select');
+      inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+          if (window.innerWidth < 768) {
+            setTimeout(() => {
+              window.scrollTo(0, 0);
+            }, 100);
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
