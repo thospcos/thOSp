@@ -1628,37 +1628,33 @@
       const accessoryContainer = accessoryItem.querySelector('.accessory-type-container');
       
       if (selectElement.value === 'Keychain' || selectElement.value === 'Pin' || selectElement.value === 'Standee') {
-        if (!accessoryContainer) {
-          createAccessoryTypeContainer(selectElement.value, accessoryItem);
-        } else {
-          // Update options if container exists but accessory type changed
-          accessoryItem.removeChild(accessoryContainer);
-          createAccessoryTypeContainer(selectElement.value, accessoryItem);
+        // Remove existing container if it exists
+        if (accessoryContainer) {
+          accessoryContainer.remove();
         }
+        createAccessoryTypeContainer(selectElement.value, accessoryItem);
         accessoryItem.querySelector('.amount-input').style.display = 'block';
       } else if (selectElement.value === 'Digital Art Commission') {
-        if (!accessoryContainer) {
-          createDigitalArtTypeContainer(accessoryItem);
-        } else {
-          accessoryContainer.classList.add('visible');
+        // Remove existing container if it exists
+        if (accessoryContainer) {
+          accessoryContainer.remove();
         }
+        createDigitalArtTypeContainer(accessoryItem);
         accessoryItem.querySelector('.amount-input').style.display = 'none';
         accessoryItem.querySelector('.amount-input').value = '1';
       } else {
         if (accessoryContainer) {
-          accessoryContainer.classList.remove('visible');
-          accessoryContainer.querySelectorAll('.accessory-option').forEach(opt => {
-            opt.classList.remove('selected');
-          });
+          accessoryContainer.remove();
         }
         accessoryItem.querySelector('.amount-input').style.display = 'block';
       }
+      updateTotalPrice();
     }
 
     // Function to create accessory type container for Keychain, Pin, Standee
     function createAccessoryTypeContainer(accessoryType, accessoryItem) {
       const container = document.createElement('div');
-      container.className = 'accessory-type-container';
+      container.className = 'accessory-type-container visible';
       
       let optionsHTML = '';
       let title = '';
@@ -1668,11 +1664,11 @@
           title = 'Select Keychain Size:';
           optionsHTML = `
             <div class="accessory-option" data-type="Keychain" data-size="4x4">
-              <span class="accessory-name">4x4 cm (+)</span>
+              <span class="accessory-name">4x4 cm</span>
               <span class="accessory-checkmark">✓</span>
             </div>
             <div class="accessory-option" data-type="Keychain" data-size="5x6">
-              <span class="accessory-name">5x6 cm (+)</span>
+              <span class="accessory-name">5x6 cm</span>
               <span class="accessory-checkmark">✓</span>
             </div>
           `;
@@ -1681,11 +1677,11 @@
           title = 'Select Pin Size:';
           optionsHTML = `
             <div class="accessory-option" data-type="Pin" data-size="4x4">
-              <span class="accessory-name">4x4 cm (+)</span>
+              <span class="accessory-name">4x4 cm</span>
               <span class="accessory-checkmark">✓</span>
             </div>
             <div class="accessory-option" data-type="Pin" data-size="5x5">
-              <span class="accessory-name">5x5 cm (+)</span>
+              <span class="accessory-name">5x5 cm</span>
               <span class="accessory-checkmark">✓</span>
             </div>
           `;
@@ -1694,15 +1690,15 @@
           title = 'Select Standee Size:';
           optionsHTML = `
             <div class="accessory-option" data-type="Standee" data-size="A6">
-              <span class="accessory-name">A6 size (+)</span>
+              <span class="accessory-name">A6 size</span>
               <span class="accessory-checkmark">✓</span>
             </div>
             <div class="accessory-option" data-type="Standee" data-size="A5">
-              <span class="accessory-name">A5 size (+)</span>
+              <span class="accessory-name">A5 size</span>
               <span class="accessory-checkmark">✓</span>
             </div>
             <div class="accessory-option" data-type="Standee" data-size="A4">
-              <span class="accessory-name">A4 size (+)</span>
+              <span class="accessory-name">A4 size</span>
               <span class="accessory-checkmark">✓</span>
             </div>
           `;
@@ -1737,14 +1733,13 @@
         });
       });
       
-      container.classList.add('visible');
       return container;
     }
 
     // Function to create digital art type container
     function createDigitalArtTypeContainer(accessoryItem) {
       const container = document.createElement('div');
-      container.className = 'accessory-type-container';
+      container.className = 'accessory-type-container visible';
       
       container.innerHTML = `
         <div style="font-size: 14px; margin-bottom: 10px; color: #9dffb3; font-weight: 800;">Select Digital Art Type:</div>
@@ -1791,7 +1786,6 @@
         });
       });
       
-      container.classList.add('visible');
       return container;
     }
 
@@ -1835,7 +1829,6 @@
       // Add event listeners
       select.addEventListener('change', function() {
         toggleAccessoryType(this, accessoryItem);
-        updateTotalPrice();
       });
       
       amountInput.addEventListener('input', updateTotalPrice);
@@ -1906,7 +1899,7 @@
       progressBar.style.width = scrolled + '%';
     });
 
-    // FIX: Initialize the page properly
+    // Initialize the page
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById("orderForm");
       const accessoriesContainer = document.getElementById("accessoriesContainer");
