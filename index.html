@@ -692,6 +692,15 @@
       color: #2cff6a;
     }
 
+    .accessory-price {
+      font-size: 13px;
+      color: #9dffb3;
+      font-weight: 700;
+      background: rgba(44, 255, 106, 0.1);
+      padding: 5px 10px;
+      border-radius: 8px;
+    }
+
     .accessory-checkmark {
       color: #2cff6a;
       font-size: 16px;
@@ -1443,17 +1452,17 @@
         </div>
         
         <div class="service-item">
-          <div class="service-name">Keychains</div>
+          <div class="service-name">Acrylic Keychains</div>
           <div class="service-desc">Durable acrylic prints</div>
         </div>
         
         <div class="service-item">
-          <div class="service-name">Pins</div>
+          <div class="service-name">Acrylic Pins</div>
           <div class="service-desc">Enamel & acrylic</div>
         </div>
         
         <div class="service-item">
-          <div class="service-name">Standees</div>
+          <div class="service-name">Acrylic Standees</div>
           <div class="service-desc">Acrylic displays</div>
         </div>
       </div>
@@ -1746,18 +1755,22 @@
         <div class="accessory-options">
           <div class="accessory-option" data-type="Bust-Up">
             <span class="accessory-name">Bust-Up</span>
+            <span class="accessory-price">10.000 IDR</span>
             <span class="accessory-checkmark">✓</span>
           </div>
           <div class="accessory-option" data-type="Half-Body">
             <span class="accessory-name">Half-Body</span>
+            <span class="accessory-price">15.000 IDR</span>
             <span class="accessory-checkmark">✓</span>
           </div>
           <div class="accessory-option" data-type="3/4 Body">
             <span class="accessory-name">3/4 Body</span>
+            <span class="accessory-price">18.000 IDR</span>
             <span class="accessory-checkmark">✓</span>
           </div>
           <div class="accessory-option" data-type="Full-Body">
             <span class="accessory-name">Full-Body</span>
+            <span class="accessory-price">20.000 IDR</span>
             <span class="accessory-checkmark">✓</span>
           </div>
         </div>
@@ -1800,9 +1813,9 @@
       
       const options = [
         {value: '', text: 'Select accessory type'},
-        {value: 'Keychain', text: 'Keychain (13.000 IDR)'},
-        {value: 'Pin', text: 'Pin (13.000 IDR)'},
-        {value: 'Standee', text: 'Standee (21.000 IDR)'},
+        {value: 'Keychain', text: 'Acrylic Keychain (13.000 IDR)'},
+        {value: 'Pin', text: 'Acrylic Pin (13.000 IDR)'},
+        {value: 'Standee', text: 'Acrylic Standee (21.000 IDR)'},
         {value: 'Digital Art Commission', text: 'Digital Art Commission (+)'}
       ];
       
@@ -1858,7 +1871,7 @@
       }
     }
 
-    // Function to calculate and update total price
+    // Function to calculate and update total price - FIXED
     function updateTotalPrice() {
       let total = 0;
       const items = document.querySelectorAll('.accessory-item');
